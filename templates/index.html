@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- HERO SECTION -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 text-white">
+<h1 class="hero-title">
+    Plan Smarter. Travel Better. 🌍✈️
+</h1>
+
+<p class="hero-subtitle">
+     Plan trips, manage budgets, and explore destinations with 
+       <strong>TravelSathi</strong>.
+       <div class="mt-4">
+    <a href="{{ url_for('login') }}" class="hero-cta-btn">
+        🚀 Get Started
+    </a>
+</div>
+
+</p>
+
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- WHY TRAVELSATHI -->
+<section class="why-travelsathi">
+    <div class="container">
+        <h2>Why TravelSathi?</h2>
+        <p class="why-subtitle">
+            Everything you need to plan a smart, stress-free journey 🌍
+        </p>
+
+        <div class="why-grid">
+            <div class="why-card">
+                <span>🧠</span>
+                <h4>Smart Trip Planning</h4>
+                <p>Personalized itineraries based on destination and duration.</p>
+            </div>
+
+            <div class="why-card">
+                <span>💰</span>
+                <h4>Transparent Budgeting</h4>
+                <p>Clear cost breakdown with no hidden surprises.</p>
+            </div>
+
+            <div class="why-card">
+                <span>🌍</span>
+                <h4>Global Destinations</h4>
+                <p>Plan trips across India and international destinations.</p>
+            </div>
+
+            <div class="why-card">
+                <span>🏨</span>
+                <h4>Travel Guidance</h4>
+                <p>Hotels, travel options, and tips — all in one place.</p>
+            </div>
+        </div>
+    </div>
+    <div class="wave-divider">
+    <svg viewBox="0 0 1440 100" preserveAspectRatio="none">
+        <path d="M0,40 C120,80 360,0 720,30 1080,60 1320,20 1440,40 L1440,0 L0,0 Z"></path>
+    </svg>
+</div>
+
+</section>
+
+
+
+
+<!-- POPULAR DESTINATIONS -->
+<section class="destinations-section">
+
+    <h2 class="destinations-title"> 🌍 Popular Destinations</h2>
+
+    <div class="destination-slider">
+        <div class="destination-track">
+
+            <!-- ONE SET -->
+            <div class="destination-card">
+                <img src="{{ url_for('static', filename='images/goa.jpg') }}">
+                <h5>Goa</h5>
+                <p>India</p>
+            </div>
+
+            <div class="destination-card">
+                <img src="{{ url_for('static', filename='images/manali.jpg') }}">
+                <h5>Manali</h5>
+                <p>India</p>
+            </div>
+
+            <div class="destination-card">
+                <img src="{{ url_for('static', filename='images/jaipur.jpg') }}">
+                <h5>Jaipur</h5>
+                <p>India</p>
+            </div>
+
+            <div class="destination-card">
+                <img src="{{ url_for('static', filename='images/kerala.jpg') }}">
+                <h5>Kerala</h5>
+                <p>India</p>
+            </div>
+
+            <div class="destination-card">
+                <img src="{{ url_for('static', filename='images/paris.jpg') }}">
+                <h5>Paris</h5>
+                <p>France</p>
+            </div>
+
+            <div class="destination-card">
+                <img src="{{ url_for('static', filename='images/dubai.jpg') }}">
+                <h5>Dubai</h5>
+                <p>UAE</p>
+            </div>
+
+            <div class="destination-card">
+                <img src="{{ url_for('static', filename='images/bali.jpg') }}">
+                <h5>Bali</h5>
+                <p>Indonesia</p>
+            </div>
+
+            <div class="destination-card">
+                <img src="{{ url_for('static', filename='images/maldives.jpg') }}">
+                <h5>Maldives</h5>
+                <p>Maldives</p>
+            </div>
+
+            <!-- DUPLICATE SET (for smooth loop) -->
+            {% for i in range(1) %}
+            <div class="destination-card">
+                <img src="{{ url_for('static', filename='images/goa.jpg') }}">
+                <h5>Goa</h5>
+                <p>India</p>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+</section>
+
+
+
+
+
+
+
+
+            <!-- CONTROLS -->
+                <button class="carousel-control-prev" type="button"
+                        data-bs-target="#destinationCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+
+                <button class="carousel-control-next" type="button"
+                        data-bs-target="#destinationCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+
+            </div>
+        </div>
+    </section>
+
+
+    {% endblock %}

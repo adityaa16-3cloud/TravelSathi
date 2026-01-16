@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="contact-page">
+
+    <!-- HEADER -->
+    <div class="contact-header">
+        <h1>📞 Contact TravelSathi</h1>
+        <p>We’re here to help you plan your next unforgettable journey 🌍</p>
+    </div>
+
+    <!-- CONTACT INFO CARDS -->
+    <div class="contact-cards">
+
+        <div class="contact-card">
+            <span class="icon">📧</span>
+            <h3>Email Us</h3>
+            <p>support@travelsathi.com</p>
+            <small>For queries & assistance</small>
+        </div>
+
+        <div class="contact-card">
+            <span class="icon">📞</span>
+            <h3>Call Us</h3>
+            <p>+91 96193XXXXX</p>
+            <small>Mon – Sat | 9:00 AM – 8:00 PM</small>
+        </div>
+
+        <div class="contact-card">
+            <span class="icon">📍</span>
+            <h3>Location</h3>
+            <p>Mumbai, India</p>
+            <small>Serving travelers worldwide</small>
+        </div>
+
+    </div>
+
+    <!-- CONTACT FORM -->
+    <div class="contact-form-section">
+
+        <h2>✉️ Send Us a Message</h2>
+        <p>Have a question? Need help planning? We’d love to hear from you.</p>
+
+        <form class="contact-form">
+
+            <div class="form-group">
+                <input type="text" placeholder="Full Name" required>
+                <input type="email" placeholder="Email Address" required>
+            </div>
+
+            <select required>
+                <option value="">Select Subject</option>
+                <option>Trip Planning Help</option>
+                <option>Booking Assistance</option>
+                <option>Partnership / Business</option>
+                <option>Feedback</option>
+                <option>Other</option>
+            </select>
+
+            <textarea rows="5" placeholder="Your Message" required></textarea>
+
+            <button type="submit" class="contact-btn">
+                Send Message ✨
+            </button>
+
+        </form>
+
+        <div class="support-note">
+            💬 We usually respond within <strong>24 hours</strong>
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="planner-page">
+<div class="planner-wrapper">
+
+<h2 class="planner-title">🧳 Plan Your Trip</h2>
+
+{% if error %}
+<div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+<form method="POST" action="/plan-trip">
+
+<div class="position-relative">
+    <label>📍Enter Destination</label>
+<input type="text"
+       id="destinationInput"
+       name="destination"
+       class="form-control"
+       placeholder="Enter destination"
+       value="{{ request.args.get('destination', '') }}"
+       autocomplete="off"
+       required>
+
+
+    <ul id="destinationSuggestions" class="list-group"></ul>
+</div>
+
+
+<!-- START DATE (CALENDAR VISIBLE) -->
+<label>📅 Start Date</label>
+<input type="date"
+       name="start_date"
+       class="form-control"
+       required>
+
+<label>📅 Number of Days</label>
+<input type="number"
+       name="days"
+       class="form-control"
+       placeholder="Enter number of days"
+       required>
+
+<label>👥 Number of People</label>
+<input type="number"
+       name="people"
+       class="form-control"
+       placeholder="Enter number of travelers"
+       required>
+
+
+<label>🏨 Hotel Type</label>
+<select name="hotel_type" class="form-control" required>
+    <option value="Budget">Budget</option>
+    <option value="Standard">Standard</option>
+    <option value="Luxury">Luxury</option>
+</select>
+
+<label>🚆/✈️ Travel Mode</label>
+<select name="travel_mode" id="travelMode" class="form-control" required>
+    <option value="">Select</option>
+    <option value="train">Train</option>
+    <option value="flight">Flight</option>
+</select>
+
+<label>🎟️ Travel Class</label>
+<select name="travel_class" id="travelClass" class="form-control" required>
+    <option value="">Select travel class</option>
+</select>
+
+<button type="submit" class="planner-btn">
+    Generate Trip Plan ✨
+</button>
+
+</form>
+</div>
+</section>
+
+<script>
+const indian = ["goa","delhi","mumbai","jaipur","kerala","manali","ooty","shimla","rishikesh","udaipur","varanasi","darjeeling"];
+const travelMode = document.getElementById("travelMode");
+const travelClass = document.getElementById("travelClass");
+const destination = document.querySelector("input[name='destination']");
+
+travelMode.addEventListener("change", () => {
+    const isInternational = !indian.includes(destination.value.toLowerCase());
+    travelClass.innerHTML = `<option value="">Select travel class</option>`;
+
+    if (travelMode.value === "train") {
+        travelClass.innerHTML += `
+            <option value="sleeper">Sleeper</option>
+            <option value="third ac">Third AC</option>
+            <option value="second ac">Second AC</option>
+            <option value="first ac">First AC</option>
+        `;
+    }
+
+    if (travelMode.value === "flight") {
+        if (isInternational) {
+            travelClass.innerHTML += `
+                <option value="economy">Economy</option>
+                <option value="premium economy">Premium Economy</option>
+                <option value="business">Business</option>
+                <option value="first class">First Class</option>
+            `;
+        } else {
+            travelClass.innerHTML += `
+                <option value="economy">Economy</option>
+                <option value="business">Business</option>
+            `;
+        }
+    }
+});
+</script>
+
+<script src="{{ url_for('static', filename='js/destinations.js') }}"></script>
+
+<script>
+const input = document.getElementById("destinationInput");
+const suggestionsBox = document.getElementById("destinationSuggestions");
+
+input.addEventListener("input", function () {
+    const query = this.value.toLowerCase();
+    suggestionsBox.innerHTML = "";
+
+    if (!query) return;
+
+    const matches = DESTINATIONS.filter(dest =>
+        dest.toLowerCase().startsWith(query)
+    ).slice(0, 6);
+
+    matches.forEach(match => {
+        const li = document.createElement("li");
+        li.className = "list-group-item list-group-item-action";
+        li.textContent = match;
+
+        li.onclick = () => {
+            input.value = match;
+            suggestionsBox.innerHTML = "";
+        };
+
+        suggestionsBox.appendChild(li);
+    });
+});
+
+document.addEventListener("click", () => {
+    suggestionsBox.innerHTML = "";
+});
+</script>
+
+
+{% endblock %}

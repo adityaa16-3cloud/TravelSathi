@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TravelSathi | Plan Smart Travel</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="{{ request.endpoint }}">
+
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark custom-navbar">
+    <div class="container-fluid px-4">
+
+        <!-- LEFT: LOGO + BRAND -->
+        <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+            <img src="{{ url_for('static', filename='images/logo/logo.png') }}"
+                 alt="TravelSathi Logo"
+                 class="navbar-logo">
+            <span class="brand-text">TravelSathi</span>
+        </a>
+
+        <!-- TOGGLER -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- NAV CONTENT -->
+        <div class="collapse navbar-collapse" id="navMenu">
+
+            <!-- CENTER: NAV LINKS -->
+            <ul class="navbar-nav align-items-center gap-4 nav-center-links ms-4">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+
+                <li class="nav-item">
+                            <a class="nav-link" href="/about">About Us</a>
+                        </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('flights') }}">Travel Options</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/hotels">Hotels</a>
+                </li>
+
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('destinations') }}">Destinations</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/plan-trip">Planner</a>
+                </li>
+
+
+            
+                 <li class="nav-item">
+                    <a class="nav-link" href="/my-trips">My Trips</a>
+                </li>
+
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="/contact">Contact Us</a>
+                        </li>
+
+</ul>
+           
+
+
+
+        </div>
+    </div>
+</nav>
+
+{% if session.get("user_email") %}
+<div id="user-status-wrapper">
+    <div id="user-status-bar">
+        <div class="user-left">
+            👤 Logged in as <strong>{{ session.get("user_email") }}</strong>
+        </div>
+
+        <div class="user-right">
+            <a href="{{ url_for('logout') }}" class="logout-btn">
+                Logout
+            </a>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="container mt-3">
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+
+<!-- PAGE CONTENT -->
+{% block content %}{% endblock %}
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-container">
+
+        <!-- BRAND -->
+        <div class="footer-brand">
+            <img src="{{ url_for('static', filename='images/logo/logo.png') }}"
+                 alt="TravelSathi Logo"
+                 class="footer-logo">
+            <h3>TravelSathi</h3>
+            <p>Travel smart with confidence 🌍✈️</p>
+        </div>
+
+        <!-- QUICK LINKS -->
+        <div class="footer-links">
+            <h4>Quick Links</h4>
+            <a href="/">Home</a>
+            <a href="/about">About Us</a>
+            <a href="/contact">Contact Us</a>
+            <a href="/plan-trip">Planner</a>
+        </div>
+
+        <!-- SUPPORT -->
+        <div class="footer-links">
+            <h4>Support</h4>
+<a href="/faqs">FAQs</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms & Conditions</a>
+
+        </div>
+
+        <!-- CONTACT -->
+        <div class="footer-contact">
+            <h4>Get in Touch</h4>
+            <p>
+    📧 <a href="mailto:support@travelsathi.com" class="footer-email">
+        support@travelsathi.com
+    </a>
+</p>
+
+            <p>📞 +91 96193XXXXX</p>
+            <p>📍Mumbai, India</p>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        © {{ 2026 }} TravelSathi. All rights reserved.
+    </div>
+</footer>
+
+</body>
+</html>

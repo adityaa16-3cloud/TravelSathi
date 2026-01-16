@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="destinations-page">
+
+    <!-- HEADER -->
+    <div class="destinations-header">
+        <h1>🌍 Explore Destinations</h1>
+        <p>Top tourist destinations across India and the world</p>
+    </div>
+
+    <!-- FILTER BUTTONS -->
+    <div class="destination-filters">
+        <button class="filter-btn active" onclick="filterDestinations('all', event)">All</button>
+        <button class="filter-btn" onclick="filterDestinations('india', event)">India</button>
+        <button class="filter-btn" onclick="filterDestinations('international', event)">International</button>
+    </div>
+
+<div class="destinations-top-section">
+
+    <!-- LEFT: TRENDING -->
+    <div class="trending-wrapper">
+        <h3>🔥 Trending Destinations</h3>
+
+<div class="trending-list">
+    <!-- 📍 India -->
+    <span onclick="goToPlanner('Goa')">Goa</span>
+    <span onclick="goToPlanner('Manali')">Manali</span>
+    <span onclick="goToPlanner('Kashmir')">Kashmir</span>
+    <span onclick="goToPlanner('Andaman')">Andaman</span>
+    <span onclick="goToPlanner('Kerala')">Kerala</span>
+    <span onclick="goToPlanner('Jaipur')">Jaipur</span>
+    <span onclick="goToPlanner('Rishikesh')">Rishikesh</span>
+    <span onclick="goToPlanner('Leh')">Leh</span>
+    <span onclick="goToPlanner('Udaipur')">Udaipur</span>
+
+    <!-- 🌍 International -->
+    <span onclick="goToPlanner('Dubai')">Dubai</span>
+    <span onclick="goToPlanner('Paris')">Paris</span>
+    <span onclick="goToPlanner('London')">London</span>
+    <span onclick="goToPlanner('New York')">New York</span>
+    <span onclick="goToPlanner('Bali')">Bali</span>
+    <span onclick="goToPlanner('Maldives')">Maldives</span>
+    <span onclick="goToPlanner('Singapore')">Singapore</span>
+    <span onclick="goToPlanner('Tokyo')">Tokyo</span>
+    <span onclick="goToPlanner('Rome')">Rome</span>
+    <span onclick="goToPlanner('Istanbul')">Istanbul</span>
+</div>
+
+
+        <!-- MAP TOGGLE BUTTON -->
+        <button id="toggleMapBtn" class="btn btn-outline-primary mt-4">
+            🗺️ Explore via Map
+        </button>
+    </div>
+
+    <!-- RIGHT: MAP -->
+    <div class="map-wrapper" id="mapWrapper" style="display: none;">
+        <h3>🗺️ Select Destination on Map</h3>
+
+        <!-- INDIA / WORLD TOGGLE -->
+        <div class="map-toggle-buttons mb-2">
+            <button id="indiaBtn" class="btn btn-primary btn-sm active">📍 India</button>
+            <button id="worldBtn" class="btn btn-outline-primary btn-sm">🌍 World</button>
+        </div>
+
+        <div id="destinationsMap" style="height:420px;border-radius:12px;"></div>
+    </div>
+
+</div>
+
+    <!-- ================= INDIA ================= -->
+    <h2 class="destinations-section-title">📍 Popular Destinations in India</h2>
+
+    <div class="destinations-grid">
+        {% for city, country, image, best_time, vibe in [
+            ("Goa","India","goa.jpg","Oct – Mar","Beaches & Nightlife"),
+            ("Manali","India","manali.jpg","Oct – Feb","Mountains & Snow"),
+            ("Jaipur","India","jaipur.jpg","Oct – Mar","Heritage & Culture"),
+            ("Kerala","India","kerala.jpg","Sep – Mar","Backwaters & Nature"),
+            ("Ooty","India","ooty.jpg","Oct – Jun","Hill Station"),
+            ("Udaipur","India","udaipur.jpg","Oct – Mar","Lakes & Palaces"),
+            ("Shimla","India","shimla.jpg","Oct – Feb","Hill Station"),
+            ("Rishikesh","India","rishikesh.jpg","Sep – Apr","Spiritual & Adventure"),
+            ("Darjeeling","India","darjeeling.jpg","Mar – Jun","Tea Gardens"),
+            ("Varanasi","India","varanasi.jpg","Oct – Mar","Spiritual"),
+            ("Agra","India","agra.jpg","Oct – Mar","Historical"),
+            ("Mysore","India","mysore.jpg","Oct – Feb","Heritage"),
+            ("Leh","India","leh.jpg","May – Sep","Adventure"),
+            ("Amritsar","India","amritsar.jpg","Oct – Mar","Culture"),
+            ("Andaman","India","andaman.jpg","Oct – May","Islands & Beaches")
+        ] %}
+        <div class="destination-card india">
+            <img src="{{ url_for('static', filename='images/destinations/' ~ image) }}">
+            <div class="destination-overlay">
+                <span>🗓 {{ best_time }}</span>
+                <span>✨ {{ vibe }}</span>
+            </div>
+            <h3>{{ city }}</h3>
+            <p>{{ country }}</p>
+            <a href="/plan-trip?destination={{ city | urlencode }}" class="btn btn-primary">Plan Trip</a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- ================= INTERNATIONAL ================= -->
+    <h2 class="destinations-section-title">🌐 International Tourist Favorites</h2>
+
+    <div class="destinations-grid">
+        {% for city, country, image, best_time, vibe in [
+            ("Paris","France","paris.jpg","Apr – Jun","Romantic & Culture"),
+            ("Dubai","UAE","dubai.jpg","Nov – Mar","Luxury & Shopping"),
+            ("Bali","Indonesia","bali.jpg","Apr – Oct","Beaches & Nature"),
+            ("Maldives","Maldives","maldives.jpg","Nov – Apr","Luxury Islands"),
+            ("London","UK","london.jpg","May – Sep","History & City Life"),
+            ("Rome","Italy","rome.jpg","Apr – Jun","Ancient History"),
+            ("New York","USA","newyork.jpg","Apr – Jun","City & Entertainment"),
+            ("Bangkok","Thailand","bangkok.jpg","Nov – Feb","Nightlife & Temples"),
+            ("Singapore","Singapore","singapore.jpg","Feb – Apr","Modern City"),
+            ("Istanbul","Turkey","istanbul.jpg","Apr – May","Culture & History"),
+            ("Tokyo","Japan","tokyo.jpg","Mar – May","Technology & Culture"),
+            ("Seoul","South Korea","seoul.jpg","Apr – Jun","Pop Culture"),
+            ("Sydney","Australia","sydney.jpg","Sep – Nov","Beaches & City"),
+            ("Barcelona","Spain","barcelona.jpg","May – Jun","Art & Beaches"),
+            ("Amsterdam","Netherlands","amsterdam.jpg","Apr – May","Canals & Culture")
+        ] %}
+        <div class="destination-card international">
+            <img src="{{ url_for('static', filename='images/destinations/' ~ image) }}">
+            <div class="destination-overlay">
+                <span>🗓 {{ best_time }}</span>
+                <span>✨ {{ vibe }}</span>
+            </div>
+            <h3>{{ city }}</h3>
+            <p>{{ country }}</p>
+            <a href="/plan-trip?destination={{ city | urlencode }}" class="btn btn-primary">Plan Trip</a>
+        </div>
+        {% endfor %}
+    </div>
+
+</section>
+
+<!-- FILTER SCRIPT -->
+<script>
+function filterDestinations(type, event) {
+    document.querySelectorAll('.destination-card').forEach(card => {
+        card.style.display =
+            type === 'all' || card.classList.contains(type) ? 'block' : 'none';
+    });
+}
+</script>
+
+<!-- LEAFLET -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- MAP SCRIPT -->
+<script>
+function goToPlanner(place) {
+    window.location.href = `/plan-trip?destination=${encodeURIComponent(place)}`;
+}
+
+let mapInitialized = false;
+let map, indiaMarkers = [], worldMarkers = [];
+
+document.getElementById("toggleMapBtn").onclick = () => {
+    const w = document.getElementById("mapWrapper");
+    w.style.display = w.style.display === "none" ? "block" : "none";
+    if (!mapInitialized) initMap();
+};
+
+function initMap() {
+    mapInitialized = true;
+    map = L.map('destinationsMap').setView([22.59,78.96],4);
+
+    L.tileLayer(
+      "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+      { subdomains:"abcd", maxZoom:19 }
+    ).addTo(map);
+
+    const india = ["Delhi","Mumbai","Goa","Bangalore","Chennai","Hyderabad","Kolkata","Jaipur","Agra","Manali","Kashmir","Rishikesh","Udaipur","Kerala","Andaman"];
+    const world = [
+  "Paris","London","New York","Dubai","Singapore","Bangkok","Tokyo",
+  "Rome","Barcelona","Amsterdam","Istanbul","Zurich","Sydney","Bali","Maldives",
+
+  // 🇨🇦 Canada
+  "Toronto",
+
+  // 🇲🇽 Mexico
+  "Mexico City",
+
+  // 🌍 Africa
+  "Cape Town",
+  "Cairo",
+
+  // 🇨🇳 China
+  "Beijing",
+  "Shanghai",
+
+  // 🇳🇿 New Zealand
+  "Auckland",
+
+  // 🇷🇺 Russia
+  "Moscow",
+
+  // Brazilia
+  "Rio de Janeiro"
+];
+
+
+    india.forEach(p=>indiaMarkers.push(L.marker(getCoords(p)).addTo(map).on("click",()=>goToPlanner(p))));
+    world.forEach(p=>worldMarkers.push(L.marker(getCoords(p)).on("click",()=>goToPlanner(p))));
+
+    document.getElementById("indiaBtn").onclick=()=>{worldMarkers.forEach(m=>map.removeLayer(m));indiaMarkers.forEach(m=>m.addTo(map));};
+    document.getElementById("worldBtn").onclick=()=>{indiaMarkers.forEach(m=>map.removeLayer(m));worldMarkers.forEach(m=>m.addTo(map));};
+}
+
+function getCoords(p){
+    const c={
+        "Delhi":[28.61,77.20],"Mumbai":[19.07,72.87],"Goa":[15.29,74.12],
+        "Bangalore":[12.97,77.59],"Chennai":[13.08,80.27],"Hyderabad":[17.38,78.48],
+        "Kolkata":[22.57,88.36],"Jaipur":[26.91,75.78],"Agra":[27.17,78.00],
+        "Manali":[32.23,77.18],"Kashmir":[34.08,74.79],"Rishikesh":[30.08,78.26],
+        "Udaipur":[24.58,73.71],"Kerala":[10.85,76.27],"Andaman":[11.74,92.65],
+        "Paris":[48.85,2.35],"London":[51.50,-0.12],"New York":[40.71,-74.00],
+        "Dubai":[25.20,55.27],"Singapore":[1.35,103.81],"Bangkok":[13.75,100.50],
+        "Tokyo":[35.67,139.65],"Rome":[41.90,12.49],"Barcelona":[41.38,2.17],
+        "Amsterdam":[52.36,4.90],"Istanbul":[41.00,28.97],"Zurich":[47.37,8.54],
+        "Sydney":[-33.86,151.20],"Bali":[-8.34,115.09],"Maldives":[3.20,73.22],
+        "Toronto":[43.65,-79.38],"Mexico City":[19.43,-99.13],"Cape Town":[-33.92,18.42],
+        "Cairo":[30.04,31.23],"Beijing":[39.90,116.40],"Shanghai":[31.23,121.47],
+        "Auckland":[-36.85,174.76],"Moscow":[55.75,37.61],"Rio de Janeiro":[-22.9068,-43.1729],
+
+    };
+    return c[p];
+}
+</script>
+
+{% endblock %}

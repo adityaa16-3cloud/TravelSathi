@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="travel-options-bg">
+
+    <div class="travel-content glass-container">
+
+        <h1 class="page-title">🚆✈️ How You’ll Travel</h1>
+        <p class="page-subtitle">
+            Smart, realistic & transparent travel cost planning
+        </p>
+
+        <!-- DOMESTIC -->
+        <h2 class="premium-title">Domestic Travel</h2>
+
+        <div class="premium-grid">
+
+            <div class="premium-card">
+                <div class="icon">🚆</div>
+                <h3>Train Travel</h3>
+                <p>Comfortable & budget-friendly for short and medium distances.</p>
+                <div class="price">₹1,500 – ₹5,000 / person</div>
+                <span class="badge">Budget Friendly</span>
+            </div>
+
+            <div class="premium-card gold">
+                <div class="icon">✈️</div>
+                <h3>Domestic Flights</h3>
+                <p>Fastest option for long-distance travel across India.</p>
+                <div class="price">₹4,000 – ₹12,000 / person</div>
+                <span class="badge">Time Saving</span>
+            </div>
+
+        </div>
+
+        <!-- INTERNATIONAL -->
+        <h2 class="premium-title">🌍 International Travel</h2>
+
+        <div class="premium-grid">
+
+            <div class="premium-card gold">
+                <div class="icon">✈️</div>
+                <h3>International Flights</h3>
+                <p>Mandatory for overseas destinations.</p>
+                <div class="price">₹40,000 – ₹70,000 / person</div>
+                <span class="badge">Mandatory</span>
+            </div>
+
+            <div class="premium-card">
+                <div class="icon">🛂</div>
+                <h3>Visa & Immigration</h3>
+                <p>Visa charges depend on destination.</p>
+                <div class="price">₹5,000 – ₹15,000</div>
+                <span class="badge">Country Specific</span>
+            </div>
+
+        </div>
+
+        <!-- CTA -->
+        <div class="premium-cta">
+            <a href="/plan-trip" class="btn btn-warning btn-lg">
+                Start Planning Your Trip ✨
+            </a>
+        </div>
+
+    </div>
+    <h2 class="premium-title">🔖 Book Your Travel</h2>
+<p class="page-subtitle">
+    Choose your preferred travel option and book instantly with trusted partners
+</p>
+
+<div class="booking-grid">
+
+    <!-- TRAIN BOOKING -->
+    <div class="booking-card train">
+        <div class="booking-header">
+            <span class="emoji">🚆</span>
+            <h3>Train Booking</h3>
+        </div>
+
+        <p class="booking-desc">
+            Comfortable & affordable travel across India with Indian Railways.
+        </p>
+
+        <ul class="booking-points">
+            <li>✔ Sleeper & AC classes</li>
+            <li>✔ Budget-friendly</li>
+            <li>✔ Ideal for short & medium distances</li>
+        </ul>
+
+        <a href="https://www.irctc.co.in/nget/train-search"
+           target="_blank"
+           class="booking-btn">
+            Book on IRCTC →
+        </a>
+    </div>
+
+    <!-- FLIGHT BOOKING -->
+    <div class="booking-card flight">
+        <div class="booking-header">
+            <span class="emoji">✈️</span>
+            <h3>Flight Booking</h3>
+        </div>
+
+        <p class="booking-desc">
+            Fastest way to travel domestically and internationally.
+        </p>
+
+        <ul class="booking-points">
+            <li>✔ Compare airlines</li>
+            <li>✔ Best for long distances</li>
+            <li>✔ Time-saving</li>
+        </ul>
+    <div class="airline-logos">
+    <img src="{{ url_for('static', filename='images/airlines/indigo.png') }}" alt="IndiGo">
+    <img src="{{ url_for('static', filename='images/airlines/airindia.png') }}" alt="Air India">
+    <img src="{{ url_for('static', filename='images/airlines/vistara.png') }}" alt="Vistara">
+    <img src="{{ url_for('static', filename='images/airlines/british.png') }}" alt="British Airways">
+    <img src="{{ url_for('static', filename='images/airlines/emirates.png') }}" alt="Emirates">
+    <img src="{{ url_for('static', filename='images/airlines/qatar.png') }}" alt="Qatar Airways">
+    <img src="{{ url_for('static', filename='images/airlines/etihad.png') }}" alt="Etihad Airways">
+    <img src="{{ url_for('static', filename='images/airlines/singapore.png') }}" alt="Singapore Airlines">
+</div>
+
+        <a href="https://www.makemytrip.com/flights/"
+           target="_blank"
+           class="booking-btn gold">
+            Book on MakeMyTrip →
+        </a>
+    </div>
+
+</div>
+
+
+
+</section>
+
+{% endblock %}

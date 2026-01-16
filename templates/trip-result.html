@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="result-page">
+
+    <div class="result-card">
+
+        <!-- HEADER -->
+        <h2 class="result-title">🌍 Your Trip to {{ destination }}</h2>
+        <p class="result-subtitle">
+            A {{ days }}-day {{ hotel_type }} trip
+            {% if start_date %} starting {{ start_date }}{% endif %}
+        </p>
+
+        <!-- TRIP OVERVIEW -->
+        <div class="trip-overview">
+            <div>📍 <strong>{{ destination }}</strong></div>
+            <div>👥 <strong>{{ people }} Travelers</strong></div>
+            <div>🏨 <strong>{{ hotel_type }}</strong></div>
+            <div>📅 <strong>{{ days }} Days</strong></div>
+        </div>
+
+        <!-- BUDGET -->
+        <div class="budget-section">
+            <h3>💰 Estimated Budget</h3>
+
+            <!-- MAIN TOTAL (SAFE) -->
+            <h1 class="total-budget">
+                ₹ {{ budget | default(0) | int }}
+            </h1>
+
+            <div class="budget-breakdown">
+                <p>🏨 Hotel: ₹ {{ hotel_cost | default(0) | int }}</p>
+                <p>🍽️ Food: ₹ {{ food_cost | default(0) | int }}</p>
+
+                {% if is_international %}
+                    <p>✈️ International Flights: ₹ {{ transport_cost | default(0) | int }}</p>
+                    <p>🛂 Visa Fees: ₹ {{ visa_cost | default(0) | int }}</p>
+                {% else %}
+                    <p>🚆 / ✈️ Travel: ₹ {{ transport_cost | default(0) | int }}</p>
+                {% endif %}
+
+                <p>🎟️ Activities: ₹ {{ activities_cost | default(0) | int }}</p>
+            </div>
+
+            <!-- FINAL TOTAL AGAIN -->
+            <div class="final-total">
+                <hr>
+                <h3>
+                    ✅ Total Trip Cost:
+                    <span>₹ {{ budget | default(0) | int }}</span>
+                </h3>
+            </div>
+        </div>
+
+        <!-- SMART ITINERARY -->
+        <div class="itinerary">
+            <h3>🗺️ Suggested Itinerary</h3>
+
+            {% for day_plan in itinerary %}
+                <div class="day-card">
+                    {{ day_plan }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- MAP PREVIEW -->
+        <div class="map-preview">
+            <h3>📍 Location Preview</h3>
+
+            <iframe
+                src="https://www.google.com/maps?q={{ destination }}&output=embed"
+                width="100%"
+                height="300"
+                style="border-radius:16px;border:0;"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="action-buttons">
+            <a href="/plan-trip" class="btn-secondary">
+                🔄 Plan Another Trip
+            </a>
+
+            <a href="https://www.makemytrip.com/hotels/"
+               target="_blank"
+               class="btn-primary">
+                🏨 Book Hotels on MakeMyTrip
+            </a>
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

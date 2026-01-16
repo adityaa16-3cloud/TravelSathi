@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="hotels-bg">
+
+    <div class="hotels-container">
+
+        <!-- HERO -->
+        <div class="hotels-hero">
+            <h1>🏨 Find the Perfect Stay</h1>
+            <p>
+                Handpicked hotels for every budget — comfort, luxury & peace of mind
+            </p>
+        </div>
+
+        <!-- HELPER -->
+        <div class="hotel-helper">
+            💡 <strong>How to choose?</strong>
+            Select a hotel type based on comfort and budget.
+            We’ll automatically include this cost in your trip plan.
+        </div>
+
+        <!-- HOTEL CATEGORIES -->
+        <div class="hotel-grid">
+
+            <!-- BUDGET -->
+            <div class="hotel-card">
+                <div class="hotel-icon">💸</div>
+                <h3>Budget Hotels</h3>
+
+                <div class="rating">
+                    ⭐ 4.2 <span>(3,200 reviews)</span>
+                </div>
+
+                <span class="tag popular">Most Booked</span>
+
+                <p class="hotel-desc">
+                    Affordable stays with essential comfort — clean, safe & value-for-money.
+                </p>
+
+                <ul>
+                    <li>✔ Clean & safe rooms</li>
+                    <li>✔ Ideal for solo & backpackers</li>
+                    <li>✔ Best value stays</li>
+                </ul>
+
+                <div class="perfect-for">
+                    Perfect for: <strong>Solo · Students · Budget Trips</strong>
+                </div>
+
+                <div class="price">₹1,000 – ₹2,500 / night</div>
+            </div>
+
+            <!-- STANDARD -->
+            <div class="hotel-card featured">
+                <div class="hotel-icon">🏨</div>
+                <h3>Standard Hotels</h3>
+
+                <div class="rating">
+                    ⭐ 4.5 <span>(5,800 reviews)</span>
+                </div>
+
+                <span class="tag popular">Best Choice</span>
+
+                <p class="hotel-desc">
+                    Balanced comfort & convenience — perfect mix of quality and price.
+                </p>
+
+                <ul>
+                    <li>✔ AC rooms</li>
+                    <li>✔ Free Wi-Fi</li>
+                    <li>✔ Room service</li>
+                </ul>
+
+                <div class="perfect-for">
+                    Perfect for: <strong>Families · Couples</strong>
+                </div>
+
+                <div class="price">₹3,000 – ₹5,000 / night</div>
+            </div>
+
+            <!-- LUXURY -->
+            <div class="hotel-card luxury">
+                <div class="hotel-icon">✨</div>
+                <h3>Luxury Hotels</h3>
+
+                <div class="rating">
+                    ⭐ 4.8 <span>(2,100 reviews)</span>
+                </div>
+
+                <span class="tag popular">Premium</span>
+
+                <p class="hotel-desc">
+                    World-class stays with premium service and unforgettable experiences.
+                </p>
+
+                <ul>
+                    <li>✔ 5-star experience</li>
+                    <li>✔ Spa & fine dining</li>
+                    <li>✔ Prime locations</li>
+                </ul>
+
+                <div class="perfect-for">
+                    Perfect for: <strong>Luxury · Honeymoon · Business</strong>
+                </div>
+
+                <div class="price">₹6,000+ / night</div>
+            </div>
+
+        </div>
+
+        <!-- COMPARISON -->
+        <div class="hotel-comparison">
+            <div>💸 Budget → Lowest cost</div>
+            <div>🏨 Standard → Best balance</div>
+            <div>✨ Luxury → Premium comfort</div>
+        </div>
+
+        <!-- POPULAR BY DESTINATION -->
+        <div class="popular-hotels">
+            <h2>🔥 Popular Hotel Picks by Destination</h2>
+
+            <div class="popular-grid">
+                <div class="popular-item" onclick="goToPlanner('Goa')">🌴 Goa · Beach Resorts</div>
+                <div class="popular-item" onclick="goToPlanner('Manali')">🏔️ Manali · Mountain Stays</div>
+                <div class="popular-item" onclick="goToPlanner('Paris')">🗼 Paris · City Hotels</div>
+                <div class="popular-item" onclick="goToPlanner('Dubai')">🏙️ Dubai · Luxury Towers</div>
+                <div class="popular-item" onclick="goToPlanner('Bali')">🌊 Bali · Villas & Resorts</div>
+            </div>
+        </div>
+
+        <!-- TOP HOTELS BY CITY -->
+        <div class="top-hotels-city">
+            <h2>🏆 Top Hotels by City</h2>
+
+            <div class="city-hotel-grid">
+                <div class="city-hotel-card">
+                    <h3>Goa</h3>
+                    <p>• Taj Resort & Spa</p>
+                    <p>• W Goa</p>
+                    <p>• Radisson Blu</p>
+                </div>
+
+                <div class="city-hotel-card">
+                    <h3>Manali</h3>
+                    <p>• The Himalayan</p>
+                    <p>• Span Resort</p>
+                    <p>• Snow Valley</p>
+                </div>
+
+                <div class="city-hotel-card">
+                    <h3>Paris</h3>
+                    <p>• Ritz Paris</p>
+                    <p>• Hotel Lutetia</p>
+                    <p>• Le Meurice</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- AMENITIES -->
+        <div class="amenities">
+            <h2>What’s Included</h2>
+
+            <div class="amenities-grid">
+                <span>🛏️ Comfortable Rooms</span>
+                <span>📶 Free Wi-Fi</span>
+                <span>🍽️ Breakfast Options</span>
+                <span>🧹 Daily Housekeeping</span>
+                <span>📍 Prime Locations</span>
+                <span>🛎️ 24×7 Support</span>
+            </div>
+        </div>
+
+        <!-- TRUST -->
+        <div class="trust-section">
+            <h2>Why Book Hotels with TravelSathi?</h2>
+
+            <div class="trust-grid">
+                <div>🛡️ Verified Properties</div>
+                <div>🔄 Easy Modifications</div>
+                <div>📞 24×7 Customer Support</div>
+                <div>💳 Transparent Pricing</div>
+                <div>🧾 No Hidden Charges</div>
+            </div>
+        </div>
+
+        <!-- TRUST NOTE -->
+        <div class="hotel-trust-note">
+            🧠 <strong>Smart planning:</strong>
+            Hotels, travel & activities are calculated together — no surprises later.
+        </div>
+
+        <!-- CTA -->
+        <div class="hotel-cta">
+            <a href="/plan-trip" class="btn btn-warning btn-lg">
+                🚀 Plan Trip with Hotels
+            </a>
+        </div>
+
+    </div>
+
+    <!-- REVIEWS -->
+    <div class="reviews-section">
+        <h2>⭐ What Travelers Say</h2>
+
+        <div class="reviews-carousel">
+            <div class="review-card">“Amazing hotel options and smooth planning!” – Rahul</div>
+            <div class="review-card">“Budget estimation felt very realistic.” – Sneha</div>
+            <div class="review-card">“Loved the luxury hotel suggestions!” – Arjun</div>
+        </div>
+    </div>
+
+</section>
+
+<script>
+function goToPlanner(place) {
+    window.location.href = `/plan-trip?destination=${place}`;
+}
+</script>
+
+{% endblock %}
