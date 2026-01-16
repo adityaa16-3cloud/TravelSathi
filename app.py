@@ -2,6 +2,10 @@ import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import session, redirect, url_for, flash
 from flask import Flask, render_template, request,  redirect, url_for, flash
+from init_db import init_db
+
+init_db()
+
 
 
 app = Flask(__name__)
