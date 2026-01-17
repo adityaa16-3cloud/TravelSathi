@@ -11,6 +11,13 @@ init_db()
 app = Flask(__name__)
 app.secret_key = "travelsathi_secret_key"
 
+app.config.update(
+    SESSION_COOKIE_SECURE=True,      # HTTPS only (Render)
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE="Lax"
+)
+
+
 from routes.planner import planner
 
 app.register_blueprint(planner)
@@ -38,13 +45,20 @@ def init_trips_table():
 
 @app.route("/")
 def home():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
     return render_template("index.html")
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    # ✅ Already logged in → don’t show login again
+    if "user_id" in session:
+        return redirect(url_for("home"))
+
     if request.method == "POST":
-        email = request.form["email"].lower().strip()
-        password = request.form["password"]
+        email = request.form.get("email", "").lower().strip()
+        password = request.form.get("password", "")
 
         conn = get_db()
         cursor = conn.cursor()
@@ -67,14 +81,17 @@ def login():
             return redirect(url_for("login"))
 
         # ✅ Case 3: Login successful
+        session.clear()  # 🔥 IMPORTANT
         session["user_id"] = user[0]
         session["user_name"] = user[1]
         session["user_email"] = user[2]
+        session.modified = True  # 🔥 IMPORTANT
 
         flash("Login successful!", "success")
         return redirect(url_for("home"))
 
     return render_template("login.html")
+
 
 
 

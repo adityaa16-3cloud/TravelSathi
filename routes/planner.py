@@ -2,7 +2,7 @@ from auth import login_required
 from data import ISLAND_DESTINATIONS
 from database import get_db
 from datetime import datetime
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from data import INDIAN_DESTINATIONS, DESTINATION_ITINERARIES
 
 planner = Blueprint("planner", __name__)
@@ -149,16 +149,23 @@ def calculate_trip_plan(destination, days, people, hotel_type, travel_mode, trav
 def plan_trip():
     if request.method == "POST":
         try:
+            # 🔐 Extra safety: session must exist
+            user_id = session.get("user_id")
+            if not user_id:
+                flash("Session expired. Please login again.", "warning")
+                return redirect(url_for("login"))
+
             destination_raw = request.form.get("destination", "")
             destination = destination_raw.strip().lower()
-            start_date = request.form["start_date"]
-            days = int(request.form["days"])
-            people = int(request.form["people"])
-            hotel_type = request.form["hotel_type"]
-            travel_mode = request.form["travel_mode"]
-            travel_class = request.form["travel_class"]
 
-                        # ❌ No train allowed for island destinations
+            start_date = request.form.get("start_date")
+            days = int(request.form.get("days", 0))
+            people = int(request.form.get("people", 1))
+            hotel_type = request.form.get("hotel_type")
+            travel_mode = request.form.get("travel_mode")
+            travel_class = request.form.get("travel_class")
+
+            # ❌ No train allowed for island destinations
             if destination in ISLAND_DESTINATIONS and travel_mode.lower() == "train":
                 flash(
                     "Train is not available for island destinations like Andaman or Lakshadweep.",
@@ -173,24 +180,35 @@ def plan_trip():
                     hotel_type=hotel_type,
                     travel_mode=travel_mode,
                     travel_class=travel_class
-       )
+                )
 
-
+            # ✅ Calculate trip
             result = calculate_trip_plan(
-                destination, days, people,
-                hotel_type, travel_mode, travel_class
+                destination,
+                days,
+                people,
+                hotel_type,
+                travel_mode,
+                travel_class
             )
 
-
-            # ✅ 3️⃣ ADD SQLITE SAVE BLOCK HERE (THIS IS THE PLACE)
+            # ✅ SAVE TRIP TO DATABASE (WITH USER ID)
             conn = get_db()
             conn.execute("""
                 INSERT INTO trips (
-                    destination, start_date, days, people,
-                    hotel_type, travel_mode, travel_class,
-                    total_budget, created_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    user_id,
+                    destination,
+                    start_date,
+                    days,
+                    people,
+                    hotel_type,
+                    travel_mode,
+                    travel_class,
+                    total_budget,
+                    created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
+                user_id,
                 destination,
                 start_date,
                 days,
@@ -199,11 +217,12 @@ def plan_trip():
                 travel_mode,
                 travel_class,
                 result["total_budget"],
-                datetime.now().isoformat()
+                datetime.utcnow().isoformat()
             ))
             conn.commit()
             conn.close()
 
+            # ✅ SUCCESS PAGE
             return render_template(
                 "trip-result.html",
                 destination=destination.title(),
@@ -214,13 +233,17 @@ def plan_trip():
                 travel_class=travel_class,
                 budget=result["total_budget"],
                 **result
-                
             )
 
         except Exception as e:
-            return render_template("planner.html", error=str(e))
+            # ❌ Log error for Render
+            print("PLAN TRIP ERROR:", e)
+
+            flash("Something went wrong while planning your trip.", "danger")
+            return render_template("planner.html")
 
     return render_template("planner.html")
+
 
 @planner.route("/my-trips")
 @login_required
