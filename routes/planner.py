@@ -143,37 +143,41 @@ def calculate_trip_plan(destination, days, people, hotel_type, travel_mode, trav
         "is_international": is_international
     }
 
-
 @planner.route("/plan-trip", methods=["GET", "POST"])
 def plan_trip():
     if request.method == "POST":
         try:
-            destination_raw = request.form.get("destination", "")
-            destination = destination_raw.strip().lower()
+            # ✅ Get & validate inputs safely
+            destination_raw = request.form.get("destination", "").strip()
+            if not destination_raw:
+                flash("Please enter a destination.", "danger")
+                return render_template("planner.html")
+
+            destination = destination_raw.lower()
 
             start_date = request.form.get("start_date")
-            days = int(request.form.get("days", 0))
-            people = int(request.form.get("people", 1))
+            if not start_date:
+                flash("Please select a start date.", "danger")
+                return render_template("planner.html")
+
+            try:
+                days = int(request.form.get("days"))
+                people = int(request.form.get("people"))
+            except (TypeError, ValueError):
+                flash("Days and people must be valid numbers.", "danger")
+                return render_template("planner.html")
+
             hotel_type = request.form.get("hotel_type")
             travel_mode = request.form.get("travel_mode")
             travel_class = request.form.get("travel_class")
 
-            # ❌ No train allowed for island destinations
-            if destination in ISLAND_DESTINATIONS and travel_mode.lower() == "train":
+            # ❌ Train not allowed for islands
+            if destination in ISLAND_DESTINATIONS and travel_mode == "train":
                 flash(
                     "Train is not available for island destinations like Andaman or Lakshadweep.",
                     "danger"
                 )
-                return render_template(
-                    "planner.html",
-                    destination=destination_raw,
-                    start_date=start_date,
-                    days=days,
-                    people=people,
-                    hotel_type=hotel_type,
-                    travel_mode=travel_mode,
-                    travel_class=travel_class
-                )
+                return render_template("planner.html")
 
             # ✅ Calculate trip
             result = calculate_trip_plan(
@@ -185,19 +189,13 @@ def plan_trip():
                 travel_class
             )
 
-            # ✅ SAVE TRIP (NO USER ID)
+            # ✅ Save trip (NO USER / NO SESSION)
             conn = get_db()
             conn.execute("""
                 INSERT INTO trips (
-                    destination,
-                    start_date,
-                    days,
-                    people,
-                    hotel_type,
-                    travel_mode,
-                    travel_class,
-                    total_budget,
-                    created_at
+                    destination, start_date, days, people,
+                    hotel_type, travel_mode, travel_class,
+                    total_budget, created_at
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 destination,
@@ -226,11 +224,13 @@ def plan_trip():
             )
 
         except Exception as e:
-            print("PLAN TRIP ERROR:", e)
+            # 🔥 REAL DEBUG (Render logs will show this)
+            print("PLAN TRIP ERROR:", str(e))
             flash("Something went wrong while planning your trip.", "danger")
             return render_template("planner.html")
 
     return render_template("planner.html")
+
 
 
 
