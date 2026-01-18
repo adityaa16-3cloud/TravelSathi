@@ -1,3 +1,4 @@
+
 from werkzeug.middleware.proxy_fix import ProxyFix
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -8,21 +9,29 @@ from init_db import init_db
 init_db()
 
 
-
 import os
+from flask import Flask
+from flask_session import Session
 
 app = Flask(__name__)
-app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
+
+# 🔐 Secret key
 app.secret_key = os.environ.get(
     "SECRET_KEY",
     "travelsathi_super_secret_key_123"
 )
 
-app.config.update(
-    SESSION_COOKIE_SECURE=True,
-    SESSION_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_SAMESITE="Lax",
-)
+# ✅ SERVER-SIDE SESSION CONFIG (CRITICAL)
+app.config["SESSION_TYPE"] = "filesystem"
+app.config["SESSION_PERMANENT"] = True
+app.config["SESSION_USE_SIGNER"] = True
+
+# ❌ REMOVE ProxyFix COMPLETELY
+# ❌ REMOVE SESSION_COOKIE_SECURE / SAME_SITE configs
+
+# ✅ Initialize session
+Session(app)
+
 
 
 
