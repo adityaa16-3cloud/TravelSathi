@@ -1,3 +1,4 @@
+from werkzeug.middleware.proxy_fix import ProxyFix
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import session, redirect, url_for, flash
@@ -11,6 +12,7 @@ init_db()
 import os
 
 app = Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 app.secret_key = os.environ.get(
     "SECRET_KEY",
     "travelsathi_super_secret_key_123"
@@ -23,11 +25,7 @@ app.config.update(
 )
 
 
-app.config.update(
-    SESSION_COOKIE_SECURE=True,      # HTTPS only (Render)
-    SESSION_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_SAMESITE="Lax"
-)
+
 
 
 from routes.planner import planner
@@ -83,13 +81,16 @@ def login():
             flash("Incorrect password.", "danger")
             return redirect(url_for("login"))
 
-        # 🔥 CRITICAL PART
+        # 🔐 CLEAR OLD SESSION
         session.clear()
+
+        # ✅ SAVE SESSION
         session["user_id"] = user[0]
         session["user_name"] = user[1]
         session["user_email"] = user[2]
         session.modified = True
 
+        flash("Login successful!", "success")
         return redirect(url_for("home"))
 
     return render_template("login.html")
