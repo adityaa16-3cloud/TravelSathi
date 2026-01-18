@@ -19,21 +19,21 @@ def init_db():
 
     # TRIPS TABLE (IMPORTANT)
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS trips (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER NOT NULL,
-        destination TEXT,
-        start_date TEXT,
-        days INTEGER,
-        people INTEGER,
-        hotel_type TEXT,
-        travel_mode TEXT,
-        travel_class TEXT,
-        total_budget INTEGER,
-        created_at TEXT,
-        FOREIGN KEY (user_id) REFERENCES users(id)
-    )
-    """)
+CREATE TABLE IF NOT EXISTS trips (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    destination TEXT NOT NULL,
+    start_date TEXT,
+    days INTEGER,
+    people INTEGER,
+    hotel_type TEXT,
+    travel_mode TEXT,
+    travel_class TEXT,
+    total_budget REAL,
+    created_at TEXT
+)
+""")
+
 
     conn.commit()
     conn.close()

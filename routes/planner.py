@@ -147,39 +147,23 @@ def calculate_trip_plan(destination, days, people, hotel_type, travel_mode, trav
 def plan_trip():
     if request.method == "POST":
         try:
-            # ✅ Get & validate inputs safely
-            destination_raw = request.form.get("destination", "").strip()
-            if not destination_raw:
-                flash("Please enter a destination.", "danger")
-                return render_template("planner.html")
-
-            destination = destination_raw.lower()
+            destination_raw = request.form.get("destination", "")
+            destination = destination_raw.strip().lower()
 
             start_date = request.form.get("start_date")
-            if not start_date:
-                flash("Please select a start date.", "danger")
-                return render_template("planner.html")
-
-            try:
-                days = int(request.form.get("days"))
-                people = int(request.form.get("people"))
-            except (TypeError, ValueError):
-                flash("Days and people must be valid numbers.", "danger")
-                return render_template("planner.html")
-
+            days = int(request.form.get("days", 0))
+            people = int(request.form.get("people", 1))
             hotel_type = request.form.get("hotel_type")
             travel_mode = request.form.get("travel_mode")
             travel_class = request.form.get("travel_class")
 
-            # ❌ Train not allowed for islands
-            if destination in ISLAND_DESTINATIONS and travel_mode == "train":
+            if destination in ISLAND_DESTINATIONS and travel_mode.lower() == "train":
                 flash(
-                    "Train is not available for island destinations like Andaman or Lakshadweep.",
+                    "Train is not available for island destinations.",
                     "danger"
                 )
                 return render_template("planner.html")
 
-            # ✅ Calculate trip
             result = calculate_trip_plan(
                 destination,
                 days,
@@ -189,7 +173,6 @@ def plan_trip():
                 travel_class
             )
 
-            # ✅ Save trip (NO USER / NO SESSION)
             conn = get_db()
             conn.execute("""
                 INSERT INTO trips (
@@ -224,8 +207,7 @@ def plan_trip():
             )
 
         except Exception as e:
-            # 🔥 REAL DEBUG (Render logs will show this)
-            print("PLAN TRIP ERROR:", str(e))
+            print("PLAN TRIP ERROR:", e)
             flash("Something went wrong while planning your trip.", "danger")
             return render_template("planner.html")
 
