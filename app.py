@@ -88,7 +88,7 @@ def login():
         session["user_id"] = user[0]
         session["user_name"] = user[1]
         session["user_email"] = user[2]
-        session.permanent = True
+        session.modified = True
 
         return redirect(url_for("home"))
 
