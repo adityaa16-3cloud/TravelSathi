@@ -174,6 +174,11 @@ def terms():
     return render_template("terms.html")
 
 
+@app.route("/reset-db")
+def reset_db():
+    from init_db import init_db
+    init_db()
+    return "✅ Database reset successful"
 
 if __name__ == "__main__":
     app.run()
