@@ -148,6 +148,7 @@ def calculate_trip_plan(destination, days, people, hotel_type, travel_mode, trav
 @login_required
 def plan_trip():
     if request.method == "POST":
+        conn = None
         try:
             # 🔐 Extra safety: session must exist
             user_id = session.get("user_id")
@@ -158,15 +159,29 @@ def plan_trip():
             destination_raw = request.form.get("destination", "")
             destination = destination_raw.strip().lower()
 
+            # 🛡️ Validate required fields
             start_date = request.form.get("start_date")
-            days = int(request.form.get("days", 0))
-            people = int(request.form.get("people", 1))
+            if not start_date:
+                flash("Please select a start date.", "danger")
+                return render_template("planner.html")
+
+            days = int(request.form.get("days") or 0)
+            people = int(request.form.get("people") or 1)
+
             hotel_type = request.form.get("hotel_type")
             travel_mode = request.form.get("travel_mode")
             travel_class = request.form.get("travel_class")
 
+            if not destination or days <= 0 or people <= 0:
+                flash("Please fill all trip details correctly.", "danger")
+                return render_template("planner.html")
+
             # ❌ No train allowed for island destinations
-            if destination in ISLAND_DESTINATIONS and travel_mode.lower() == "train":
+            if (
+                destination in ISLAND_DESTINATIONS
+                and travel_mode
+                and travel_mode.lower() == "train"
+            ):
                 flash(
                     "Train is not available for island destinations like Andaman or Lakshadweep.",
                     "danger"
@@ -182,7 +197,7 @@ def plan_trip():
                     travel_class=travel_class
                 )
 
-            # ✅ Calculate trip
+            # ✅ Calculate trip (your logic untouched)
             result = calculate_trip_plan(
                 destination,
                 days,
@@ -192,7 +207,11 @@ def plan_trip():
                 travel_class
             )
 
-            # ✅ SAVE TRIP TO DATABASE (WITH USER ID)
+            # 🛡️ Safety check for calculation
+            if not result or "total_budget" not in result:
+                raise ValueError("Trip calculation failed")
+
+            # ✅ SAVE TRIP TO DATABASE
             conn = get_db()
             conn.execute("""
                 INSERT INTO trips (
@@ -220,7 +239,6 @@ def plan_trip():
                 datetime.utcnow().isoformat()
             ))
             conn.commit()
-            conn.close()
 
             # ✅ SUCCESS PAGE
             return render_template(
@@ -236,32 +254,62 @@ def plan_trip():
             )
 
         except Exception as e:
-            # ❌ Log error for Render
-            print("PLAN TRIP ERROR:", e)
+            # 🔥 Render-safe logging
+            print("PLAN TRIP ERROR:", str(e))
 
             flash("Something went wrong while planning your trip.", "danger")
             return render_template("planner.html")
 
+        finally:
+            # 🧹 Always close DB (prevents Render crashes)
+            if conn:
+                conn.close()
+
     return render_template("planner.html")
+
 
 
 @planner.route("/my-trips")
 @login_required
 def my_trips():
+    user_id = session.get("user_id")
+
+    if not user_id:
+        flash("Session expired. Please login again.", "warning")
+        return redirect(url_for("login"))
+
     conn = get_db()
     trips = conn.execute(
-        "SELECT * FROM trips ORDER BY created_at DESC"
+        """
+        SELECT *
+        FROM trips
+        WHERE user_id = ?
+        ORDER BY created_at DESC
+        """,
+        (user_id,)
     ).fetchall()
     conn.close()
 
     return render_template("my_trips.html", trips=trips)
 
+
 @planner.route("/delete-trip/<int:trip_id>", methods=["POST"])
+@login_required
 def delete_trip(trip_id):
+    user_id = session.get("user_id")
+
+    if not user_id:
+        flash("Session expired. Please login again.", "warning")
+        return redirect(url_for("login"))
+
     conn = get_db()
-    conn.execute("DELETE FROM trips WHERE id = ?", (trip_id,))
+    conn.execute(
+        "DELETE FROM trips WHERE id = ? AND user_id = ?",
+        (trip_id, user_id)
+    )
     conn.commit()
     conn.close()
 
     flash("🗑️ Trip deleted successfully!", "success")
     return redirect(url_for("planner.my_trips"))
+
