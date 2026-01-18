@@ -8,8 +8,20 @@ init_db()
 
 
 
+import os
+
 app = Flask(__name__)
-app.secret_key = "travelsathi_secret_key"
+app.secret_key = os.environ.get(
+    "SECRET_KEY",
+    "travelsathi_super_secret_key_123"
+)
+
+app.config.update(
+    SESSION_COOKIE_SECURE=True,
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE="Lax",
+)
+
 
 app.config.update(
     SESSION_COOKIE_SECURE=True,      # HTTPS only (Render)
@@ -45,24 +57,17 @@ def init_trips_table():
 
 @app.route("/")
 def home():
-    if "user_id" not in session:
-        return redirect(url_for("login"))
     return render_template("index.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    # ✅ Already logged in → don’t show login again
-    if "user_id" in session:
-        return redirect(url_for("home"))
-
     if request.method == "POST":
-        email = request.form.get("email", "").lower().strip()
-        password = request.form.get("password", "")
+        email = request.form["email"].lower().strip()
+        password = request.form["password"]
 
         conn = get_db()
         cursor = conn.cursor()
-
         cursor.execute(
             "SELECT id, name, email, password FROM users WHERE email = ?",
             (email,)
@@ -70,27 +75,25 @@ def login():
         user = cursor.fetchone()
         conn.close()
 
-        # ❌ Case 1: Email does not exist
         if not user:
-            flash("Account not found. Please register first.", "warning")
-            return redirect(url_for("register"))
-
-        # ❌ Case 2: Password incorrect
-        if not check_password_hash(user[3], password):
-            flash("Incorrect password. Please try again.", "danger")
+            flash("Account not found. Please register first.", "danger")
             return redirect(url_for("login"))
 
-        # ✅ Case 3: Login successful
-        session.clear()  # 🔥 IMPORTANT
+        if not check_password_hash(user[3], password):
+            flash("Incorrect password.", "danger")
+            return redirect(url_for("login"))
+
+        # 🔥 CRITICAL PART
+        session.clear()
         session["user_id"] = user[0]
         session["user_name"] = user[1]
         session["user_email"] = user[2]
-        session.modified = True  # 🔥 IMPORTANT
+        session.permanent = True
 
-        flash("Login successful!", "success")
         return redirect(url_for("home"))
 
     return render_template("login.html")
+
 
 
 
