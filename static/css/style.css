@@ -4431,3 +4431,38 @@ h2 {
 .my_trips p {
     color: #000000 !important;
 }
+
+/* Auth page headings */
+.auth-card h2 {
+    color: #ffffff;              /* pure white */
+    font-weight: 700;
+    text-align: center;
+}
+
+/* Optional subtitle */
+.auth-card p {
+    color: #cbd5e1;              /* soft gray */
+}
+
+/* Hotel section headings */
+.hotel-card h3,
+.hotel-card h4 {
+    color: #f59e0b; /* warm amber */
+    font-weight: 600;
+}
+
+/* Planner result title */
+.trip-result h2,
+.trip-result h1 {
+    color: #38bdf8;   /* sky blue */
+    font-weight: 700;
+}
+
+/* FIX: Map panel heading visibility */
+.map-panel h2,
+.map-panel h1,
+.map-container h2,
+.map-container h1 {
+    color: #000000 !important;
+    font-weight: 700;
+}
